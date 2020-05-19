@@ -1,0 +1,50 @@
+﻿@using Entities
+@using Business
+
+
+@inject B_Category bCategory
+
+
+@if (categories == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table class="table table-hover border-primary">
+        <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Categoria</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in categories)
+            {
+                <tr>
+                    <td>@category.CategoryId</td>
+                    <td>@category.CategoryName</td>
+                    <td><a href="category/update/@category.CategoryId">Editar</a></td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@code {
+
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = bCategory.CategoryList();
+    }
+
+    
+}

@@ -1,0 +1,71 @@
+﻿@using Entities
+@using Business
+
+@inject B_Product bProduct
+@inject B_Category bCategory
+
+<hr />
+<label><b>Filtro de búsqueda</b></label>
+<select class="form-control" @onchange="CategoryChanged">
+    
+    <option value="Seleccione categoria:">Seleccione una categoria:</option>
+    @foreach (var category in categories)
+    {
+        <option value="@category.CategoryId">@category.CategoryName</option>
+    }
+</select>
+<hr />
+
+
+
+<table class="table table-hover border-primary">
+    <thead>
+        <tr>
+            <th>Referencia</th>
+            <th>Nombre producto</th>
+            <th>Categoria</th>
+            <th>Cantidad</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in tempProducts)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.CategoryId</td>
+                <td>@product.TotalQuantity</td>
+                <td><a href="product/update/@product.ProductId">Editar</a></td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+@message
+
+
+@code {
+    List<ProductEntity> products = new List<ProductEntity>();
+    List<ProductEntity> tempProducts = new List<ProductEntity>();
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+
+    string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = bProduct.ProductList();
+        tempProducts = products; //Variable para no hacer demasiadas llamadas a la base de datos
+        categories = bCategory.CategoryList();
+    }
+
+    private void CategoryChanged(ChangeEventArgs e)
+    {
+        //message = e.Value.ToString();
+        tempProducts= products.Where(c=>c.CategoryId==e.Value.ToString()).ToList();
+
+    }
+
+
+}

@@ -1,0 +1,33 @@
+﻿<input type="text" placeholder="FullName" @bind-value="@fullName" />
+<input type="text" placeholder="Address" @bind-value="@address" />
+<input type="button" value="Click here" @onclick="changeText" />
+
+
+
+<div>
+    @message
+</div>
+
+
+@code{
+    [Parameter]
+    public string Message { get; set; }
+
+
+    string message = "", fullName = "", address = "";
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        message = Message;
+    }
+
+    private void changeText()
+    {
+        message = $"Su nombre es {fullName} y su dirección es {address}";
+        fullName = "";
+        address = "";
+    }
+
+}
